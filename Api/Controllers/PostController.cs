@@ -61,7 +61,7 @@ namespace Api.Controllers
             var userId = User.GetClaimValue<Guid>(ClaimNames.Id);
             if (userId != default)
             {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "attaches", model.PostId.ToString());
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "attaches", model.AuthorContentId.ToString());
                 if (!model.AuthorContentId.HasValue)
                 {
 
@@ -69,9 +69,24 @@ namespace Api.Controllers
                         throw new Exception("not authorize");
                     model.AuthorContentId = userId;
                 }
-                await _commentService.AddCommentToPost(userId,path,model);
+                await _commentService.AddCommentToPost(userId, path, model);
             }
+        }
+        [HttpPost]
+        public async Task AddlikeToPostContent(DoLikeModel model)
+        {
+            var userId = User.GetClaimValue<Guid>(ClaimNames.Id);
+            if (userId != default)
+            {
+                model.AutorLikeId = userId;
+                await _commentService.AddlikeToPost(model);
+
+            }
+            else
+                throw new Exception("not authorize");
+        }
+
         }
 
     }
-}
+
