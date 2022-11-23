@@ -16,7 +16,7 @@ namespace Api.Services
         private readonly DataContext _context;
 
 
-        public CommentService(IMapper mapper, UserService userService, DataContext context)
+        public CommentService(IMapper mapper,  DataContext context)
         {
 
             _mapper = mapper;
@@ -65,6 +65,18 @@ namespace Api.Services
 
         await _context.SaveChangesAsync();
          }
+
+      public async Task<int> GetCountLikePostConten(Guid id)
+        {
+            var comment = await _context.PostContents.FirstOrDefaultAsync(x => x.Id == id);
+            if (comment==null||comment == default)
+                throw new UserNotFoundException();
+            var count= comment.Countlike;
+            if (count == null)
+                count = 0;
+            return (int)count;            
+
+        }
     private async Task<User> GetUserById(Guid id)
         {
             var user = await _context.Users.Include(x => x.Avatar).Include(x => x.Posts).FirstOrDefaultAsync(x => x.Id == id);

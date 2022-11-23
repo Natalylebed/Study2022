@@ -85,8 +85,12 @@ namespace Api.Controllers
             else
                 throw new Exception("not authorize");
         }
-
-        }
+        [HttpGet]
+        public async Task<int> GetCountLikePostContent(Guid idPostContent)
+            => await _commentService.GetCountLikePostConten(idPostContent);
 
     }
+    
+
+}
 
